@@ -3,73 +3,70 @@ const Node = require('./node');
 class LinkedList {
     constructor() {
         this.head = null; 
-        this.queue = null;
+        this.tail = null;
         this.size = 0; 
     }
 
     append(data) { 
-    var node = new Node(data, this.queue); 
-
-    var current; 
-  
-    // if list is Empty add the 
-    // data and make it head 
-    if (this.head == null) 
-        this.head = node; 
-    else { 
-        current = this.head; 
-  
-        // iterate to the end of the 
-        // list 
-        while (current.next) { 
-            current = current.next; 
-        } 
-  
-        // add node 
-        current.next = node; 
-    } 
-    this.size++; 
+    var node = new Node(data, this.tail); 
+        if (this.tail) this.tail.next = node;
+        this.tail = node;
+        if (!this.head) this.head = node;
+        this.size++;
+        return this;
     }
 
-    head() {}
+    head() {
+        return this.head ? this.head.data : null;
+    }
 
-    tail() {}
+    tail() {
+        return this.tail ? this.tail.data : null;
+    }
 
-    at(index) {}
+    at(index) {
+        var i = index;
+        var node = this.head;
+        while (i > 0) {
+          if (node.next) node = node.next;
+          else {
+              this.nodeByIndex = null;
+              return null;
+          }
+          i--;
+        }
+        this.nodeByIndex = node;
+        if (!node) return null;
+        return node.data;
+    }
 
     insertAt(index, data) {
         if (index > 0 && index > this.size) 
         return false; 
-    else { 
-        // creates a new node 
-        var node = new Node(data); 
-        var curr, prev; 
-  
-        curr = this.head; 
-  
-        // add the data to the 
-        // first index 
-        if (index == 0) { 
-            node.next = head; 
-            this.head = node; 
-        } else { 
+        else { 
+            var node = new Node(data); 
+            var curr, prev; 
+    
             curr = this.head; 
-            var it = 0; 
-  
-            // iterate over the list to find 
-            // the position to insert 
-            while (it < index) { 
-                it++; 
-                prev = curr; 
-                curr = curr.next; 
+    
+            if (index == 0) { 
+                node.next = head; 
+                this.head = node; 
+            } else { 
+                curr = this.head; 
+                var it = 0; 
+    
+                while (it < index) { 
+                    it++; 
+                    prev = curr; 
+                    curr = curr.next; 
+                } 
+    
+                node.next = curr; 
+                prev.next = node; 
             } 
-  
-            // adding an data 
-            node.next = curr; 
-            prev.next = node; 
+            this.size++; 
         } 
-        this.size++; 
-    } 
     }
 
     isEmpty() {
@@ -77,68 +74,44 @@ class LinkedList {
     }
 
     clear() {
-        var current = this.head; 
-    var prev = null; 
-  
-    // iterate over the list 
-    while (current != null) { 
-        // comparing data with current 
-        // data if found then remove the 
-        // and return true 
-        if (current.data === data) { 
-            if (prev == null) { 
-                this.head = current.next; 
-            } else { 
-                prev.next = current.next; 
-            } 
-            this.size--; 
-            return current.data; 
-        } 
-        prev = current; 
-        current = current.next; 
-    } 
-    return -1; 
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+        return this;
     }
 
     deleteAt(index) {
-        var current = this.head; 
-        var prev = null; 
-  
-    // iterate over the list 
-    while (current != null) { 
-        // comparing data with current 
-        // data if found then remove the 
-        // and return true 
-        if (current.data === data) { 
-            if (prev == null) { 
-                this.head = current.next; 
-            } else { 
-                prev.next = current.next; 
-            } 
-            this.size--; 
-            return current.data; 
-        } 
-        prev = current; 
-        current = current.next; 
-    } 
-    return -1; 
+        this.at(index);
+        if (this.nodeByIndex.prev) this.nodeByIndex.prev.next = this.nodeByIndex.next;
+        if (this.nodeByIndex.next) this.nodeByIndex.next.prev = this.nodeByIndex.prev;
+        if (this.nodeByIndex === this.head) this.head = this.nodeByIndex.next ? this.nodeByIndex.next : null;
+        if (this.nodeByIndex === this.tail) this.tail = this.nodeByIndex.prev ? this.nodeByIndex.prev : null;
+        return this;
     }
 
-    reverse() {}
+    reverse() {
+        this.head = this.tail;
+        var node = this.head;
+        do {
+          [node.next, node.prev] = [node.prev, node.next];
+          if (node.next) node = node.next;
+          else break;
+        } while (node.next);
+        this.tail = node;
+        return this;
+    }
 
     indexOf(data) {
-        var count = 0; 
-        var current = this.head; 
-   
-    while (current.data != data) {  
-        if (current.data === data) 
-            return count; 
-        count++; 
-        current = current.next; 
-    } 
-  
-    return -1; 
-    }
+        var node = this.head;
+        var index = 0;
+        while(node.data !== data) {
+          if(node.next) {
+            node = node.next;
+            index ++;
+          } else return -1;
+        }
+        return index;
+      }
 }
 
 module.exports = LinkedList;
