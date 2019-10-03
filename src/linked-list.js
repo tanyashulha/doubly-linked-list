@@ -3,18 +3,17 @@ const Node = require('./node');
 class LinkedList {
     constructor() {
         this.head = null; 
+        this.queue = null;
         this.size = 0; 
     }
 
-    append(data) {
-        // creates a new node 
-    var node = new Node(element); 
-  
-    // to store current node 
+    append(data) { 
+    var node = new Node(data, this.queue); 
+
     var current; 
   
     // if list is Empty add the 
-    // element and make it head 
+    // data and make it head 
     if (this.head == null) 
         this.head = node; 
     else { 
@@ -43,12 +42,12 @@ class LinkedList {
         return false; 
     else { 
         // creates a new node 
-        var node = new Node(element); 
+        var node = new Node(data); 
         var curr, prev; 
   
         curr = this.head; 
   
-        // add the element to the 
+        // add the data to the 
         // first index 
         if (index == 0) { 
             node.next = head; 
@@ -65,7 +64,7 @@ class LinkedList {
                 curr = curr.next; 
             } 
   
-            // adding an element 
+            // adding an data 
             node.next = curr; 
             prev.next = node; 
         } 
@@ -83,17 +82,17 @@ class LinkedList {
   
     // iterate over the list 
     while (current != null) { 
-        // comparing element with current 
-        // element if found then remove the 
+        // comparing data with current 
+        // data if found then remove the 
         // and return true 
-        if (current.element === element) { 
+        if (current.data === data) { 
             if (prev == null) { 
                 this.head = current.next; 
             } else { 
                 prev.next = current.next; 
             } 
             this.size--; 
-            return current.element; 
+            return current.data; 
         } 
         prev = current; 
         current = current.next; 
@@ -107,17 +106,17 @@ class LinkedList {
   
     // iterate over the list 
     while (current != null) { 
-        // comparing element with current 
-        // element if found then remove the 
+        // comparing data with current 
+        // data if found then remove the 
         // and return true 
-        if (current.element === element) { 
+        if (current.data === data) { 
             if (prev == null) { 
                 this.head = current.next; 
             } else { 
                 prev.next = current.next; 
             } 
             this.size--; 
-            return current.element; 
+            return current.data; 
         } 
         prev = current; 
         current = current.next; 
@@ -129,19 +128,15 @@ class LinkedList {
 
     indexOf(data) {
         var count = 0; 
-    var current = this.head; 
-  
-    // iterae over the list 
-    while (current != null) { 
-        // compare each element of the list 
-        // with given element 
-        if (current.element === element) 
+        var current = this.head; 
+   
+    while (current.data != data) {  
+        if (current.data === data) 
             return count; 
         count++; 
         current = current.next; 
     } 
   
-    // not found 
     return -1; 
     }
 }
