@@ -41,32 +41,16 @@ class LinkedList {
     }
 
     insertAt(index, data) {
-        if (index > 0 && index > this.llength) 
-        return false; 
-        else { 
-            var node = new Node(data); 
-            var curr, prev; 
-    
-            curr = this._head; 
-    
-            if (index == 0) { 
-                node.next = head; 
-                this._head = node; 
-            } else { 
-                curr = this._head; 
-                var it = 0; 
-    
-                while (it < index) { 
-                    it++; 
-                    prev = curr; 
-                    curr = curr.next; 
-                } 
-    
-                node.next = curr; 
-                prev.next = node; 
-            } 
-            this.llength++; 
-        } 
+        if (index === 0)  this.at(0);
+        else this.at(index - 1);
+        var previousNode = this.nodeByIndex ? this.nodeByIndex : null;
+        var nextNode = this.nodeByIndex ? this.nodeByIndex.next : null;
+        var node = new Node(data, previousNode, nextNode);
+        if (nextNode) {
+        nextNode.prev = node;
+        this.nodeByIndex.next = node;
+        }
+    return this;
     }
 
     isEmpty() {
